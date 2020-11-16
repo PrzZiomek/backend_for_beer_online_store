@@ -11,5 +11,6 @@ router.get("/user", user)
 
 router.post("/api/registration", registrationData)
 
+ // /api/auth - take into account
 
  export const adminRoutes = router;

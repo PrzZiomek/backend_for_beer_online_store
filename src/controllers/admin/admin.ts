@@ -19,16 +19,19 @@ export const main = (_ : Request, res: Response) => {
     res.send("<h3>Welcome to Node.js server!!!</h3>");
   }
 
-
-export const user = (_: Request, res: Response) => {
+export const user = (req: Request, res: Response) => {
     res.send("<p>user data logged</p>");
+    //console.log(req.get("Cookie")); // registrated=true
+    console.log(req.session);
+    req.session.registered = true;
     fetchAllUsers() 
       .then(res => {
         const [ rows, field ]: [RowDataOrOkPacketTuple | ResultSetHeader, FieldPacket[]] = res; 
-        console.log(rows);     
+        //console.log(rows);     
       })
       .catch(err => console.log(err))
   }
 
 
-  
+
+ 
