@@ -3,7 +3,6 @@ import { User } from './userInterface';
 
 
 
-export const fetchAllUsers = ()  => db.execute('SELECT * FROM users');
 
 export const saveUser = ({ name, surname, email, password }: User) => db.execute(
     'INSERT INTO users (name, surname, email, password) VALUES (?, ?, ?, ?)',

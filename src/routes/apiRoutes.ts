@@ -1,11 +1,11 @@
 import { Router } from "express";
 
-import { registrationData, logout } from "../controllers/api/api";
+import { registration, logout } from "../controllers/api/api";
 
 const router = Router();
 
 
-router.post("/api/registration", registrationData)
+router.post("/api/registration", registration)
 
 router.post("/api/logout", logout)
 

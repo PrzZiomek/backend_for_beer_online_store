@@ -9,7 +9,6 @@ const cors_1 = __importDefault(require("cors"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const express_session_1 = __importDefault(require("express-session"));
 const MySQLStore = require('express-mysql-session')(express_session_1.default);
-//import mysql from 'mysql2';
 const adminRoutes_1 = require("./routes/adminRoutes");
 const sessionStoreOptions_1 = require("./util/sessionStoreOptions");
 const apiRoutes_1 = require("./routes/apiRoutes");
