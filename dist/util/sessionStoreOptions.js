@@ -1,4 +1,7 @@
-export const options = {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.options = void 0;
+exports.options = {
     host: 'localhost',
     port: 3306,
     user: 'root',
@@ -7,4 +10,4 @@ export const options = {
     schema: {
         tableName: 'sessions',
     }
-}
+};

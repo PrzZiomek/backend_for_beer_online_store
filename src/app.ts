@@ -4,10 +4,11 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import session from 'express-session';
 const MySQLStore = require('express-mysql-session')(session);
-import mysql from 'mysql2';
 
 import { adminRoutes } from './routes/adminRoutes';
 import { options } from './util/sessionStoreOptions';
+import { apiRoutes } from './routes/apiRoutes';
+
 
 const PORT = 8080;
 
@@ -26,6 +27,7 @@ app.use(session({
 }))
 
 app.use(adminRoutes)
+app.use(apiRoutes)
 
 app.listen(PORT, () => {
   console.log('Server start!');

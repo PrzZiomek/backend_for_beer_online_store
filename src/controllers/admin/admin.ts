@@ -1,18 +1,8 @@
 import { Request, Response } from "express";
 import { ResultSetHeader, FieldPacket } from 'mysql2';
 
-import { User } from "../../models/users/userInterface";
-import { saveUser, fetchAllUsers } from "../../models/users/user";
+import { fetchAllUsers } from "../../models/users/saveUser";
 import { RowDataOrOkPacketTuple } from "./types";
-
-
-
-export const registrationData = (req: Request, res: Response) => {
-    const user: User = req.body.user;
-    saveUser(user)
-      .then(() => res.redirect("/user"))
-      .catch((err) => console.log(err))
-  }
 
 
 export const main = (_ : Request, res: Response) => {
@@ -21,12 +11,14 @@ export const main = (_ : Request, res: Response) => {
 
 export const user = (req: Request, res: Response) => {
     res.send("<p>user data logged</p>");
-    //console.log(req.get("Cookie")); // registrated=true
-    console.log(req.session);
+    //console.log(req.get("Cookie"));  registered=true
+    //console.log(req.session); Session { cookie: {...}}
+    req.session.save((err: Error) => err && console.log(err))
     req.session.registered = true;
     fetchAllUsers() 
-      .then(res => {
-        const [ rows, field ]: [RowDataOrOkPacketTuple | ResultSetHeader, FieldPacket[]] = res; 
+      .then(res => { 
+         const rows = res[0]
+         const field = res[1];
         //console.log(rows);     
       })
       .catch(err => console.log(err))

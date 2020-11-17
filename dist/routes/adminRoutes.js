@@ -6,5 +6,4 @@ const admin_1 = require("../controllers/admin/admin");
 const router = express_1.Router();
 router.get("/", admin_1.main);
 router.get("/user", admin_1.user);
-router.post("/api/registration", admin_1.registrationData);
 exports.adminRoutes = router;
