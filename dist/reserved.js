@@ -30,4 +30,18 @@ export const checkIfUserAlreadyRegistered = (user: User, cb: Function) => {
       })
       .catch(err => console.log(err))
 
-}*/ 
+}*/
+// SERVER SIDE EVENTS
+/*
+import SSE from 'express-sse-ts';
+
+
+
+const sse = new SSE();
+
+app.get('/events', sse.init);
+
+setInterval(() => {
+  sse.send(`Istnieje juz konto z takimi danymi`);
+}, 1000);
+*/ 

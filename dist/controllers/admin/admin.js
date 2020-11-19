@@ -6,7 +6,7 @@ exports.main = (_, res) => {
     res.send("<h3>Welcome to Node.js server!!!</h3>");
 };
 exports.user = (req, res) => {
-    res.send("<p>user data logged</p>");
+    res.send("<p>user data registered</p>");
     req.session.save((err) => console.log(err));
     req.session.registered = true;
     fetchAllUsers_1.fetchAllUsers()

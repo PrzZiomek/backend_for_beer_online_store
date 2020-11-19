@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.apiRoutes = void 0;
+const express_1 = require("express");
+const login_1 = require("../../controllers/api/login");
+const registration_1 = require("../../controllers/api/registration");
+const logout_1 = require("../../controllers/api/logout");
+const router = express_1.Router();
+router.post("/api/registration", registration_1.registration);
+router.post("/api/login", login_1.login);
+router.post("/api/logout", logout_1.logout);
+exports.apiRoutes = router;

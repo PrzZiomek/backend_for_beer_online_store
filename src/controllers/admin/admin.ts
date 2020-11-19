@@ -9,7 +9,7 @@ export const main = (_ : Request, res: Response) => {
 
 
 export const user = (req: Request, res: Response) => {
-    res.send("<p>user data logged</p>");
+    res.send("<p>user data registered</p>");
     req.session.save((err: Error) =>  console.log(err))
     req.session.registered = true;
     fetchAllUsers() 
@@ -19,6 +19,8 @@ export const user = (req: Request, res: Response) => {
         // console.log(rows);        
       })
       .catch(err => console.log(err))
+
+
   }
 
 

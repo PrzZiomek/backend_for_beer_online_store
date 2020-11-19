@@ -4,7 +4,7 @@ import { searchForUser } from "./searchForUser";
 import { promiseWrapper } from "./promiseWrapper";
 
 
-export const checkIfUserAlreadyRegistered = (user: User, cb: Function) => {
+export const checkIfSuchUserAlreadyRegistered = (user: User, cb: Function) => {
    promiseWrapper(fetchAllUsers, (res: any) => { 
         const rows = res[0] 
         const usersFromDB = Object.values(JSON.parse(JSON.stringify(rows)));  
