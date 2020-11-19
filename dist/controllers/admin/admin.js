@@ -7,7 +7,7 @@ exports.main = (_, res) => {
 };
 exports.user = (req, res) => {
     res.send("<p>user data logged</p>");
-    req.session.save((err) => err && console.log(err));
+    req.session.save((err) => console.log(err));
     req.session.registered = true;
     fetchAllUsers_1.fetchAllUsers()
         .then(res => {
