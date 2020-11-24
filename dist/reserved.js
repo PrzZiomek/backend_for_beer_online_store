@@ -57,4 +57,10 @@ function toPromise(ctx, func, ...args) {
     });
 }
 
+*/
+/*
+
+function create<T>(c: {new(): T}): T{
+  return new c();
+}
 */ 

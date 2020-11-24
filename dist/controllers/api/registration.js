@@ -5,18 +5,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.registration = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
-const saveUser_1 = require("../../models/users/saveUser");
-const checkIfSuchUserIsAlready_1 = require("./helpers/checkIfSuchUserIsAlready");
-const fetchAllUsers_1 = require("../../models/users/fetchAllUsers");
+const User_1 = require("../../models/users/User");
 exports.registration = (req, res) => {
     const user = req.body.user;
     (async () => {
-        const resDB = await fetchAllUsers_1.fetchAllUsers().catch(err => console.log(`req to database: ${err}`));
-        if (!resDB)
-            return;
-        const rows = resDB[0];
-        const userFound = checkIfSuchUserIsAlready_1.checkIfSuchUserIsAlready(rows, user);
-        if (userFound) {
+        const matchedUser = await User_1.User.findUser(user).catch(err => console.log(err));
+        if (matchedUser) {
             res.status(200).json({
                 message: "Istnieje juz konto z takimi danymi"
             });
@@ -26,7 +20,7 @@ exports.registration = (req, res) => {
             if (!hashedPswd)
                 return;
             let password = hashedPswd;
-            saveUser_1.saveUser({ ...user, password });
+            User_1.User.saveUser({ ...user, password });
             res.status(200).json({
                 message: "Rejestracja się udała"
             });
