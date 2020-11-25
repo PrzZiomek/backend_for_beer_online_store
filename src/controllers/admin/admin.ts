@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
+import { User } from "../../models/users/User";
 
-import { fetchAllUsers } from "../../models/users/fetchAllUsers"
 
 
 export const main = (_ : Request, res: Response) => {
@@ -12,7 +12,7 @@ export const user = (req: Request, res: Response) => {
     res.send("<p>user data registered</p>");
     req.session.save((err: Error) =>  console.log(err))
     req.session.registered = true;
-    fetchAllUsers() 
+   User.fetchAllUsers() 
       .then(res => { 
          const rows = res[0]
          const field = res[1];

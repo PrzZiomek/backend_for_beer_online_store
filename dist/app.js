@@ -32,6 +32,10 @@ app.use((req, res, next) => {
 });
 app.use(admin_1.adminRoutes);
 app.use(main_1.apiRoutes);
+app.use((error, req, res, next) => {
+    // res.status(error.httpStatusCode)
+    res.send(`<h1>Error: ${error.httpStatusCode}</h1>`);
+});
 app.listen(PORT, () => {
     console.log('Server start!');
 });

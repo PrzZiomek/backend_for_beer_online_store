@@ -7,6 +7,7 @@ import session from 'express-session';
 import { adminRoutes } from './routes/admin';
 import { options } from './util/sessionStoreOptions';
 import { apiRoutes } from './routes/api/main';
+import { ExtendedError } from './controllers/errors/extendedErrorClass';
 
 
 const PORT = 8080;
@@ -36,6 +37,11 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
 app.use(adminRoutes);
 app.use(apiRoutes);
+
+app.use((error: ExtendedError, req: Request, res: Response, next: NextFunction) => {
+ // res.status(error.httpStatusCode)
+
+})
 
 
 app.listen(PORT, () => {

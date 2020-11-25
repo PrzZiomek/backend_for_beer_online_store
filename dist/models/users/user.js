@@ -10,7 +10,8 @@ exports.User = class {
     }
     static async findUser(user) {
         const rows = await this.fetchAllUsers().catch(err => console.log(`req to database: ${err}`));
-        //  if(!rows) return;
+        if (!rows)
+            return;
         const usersFromDB = Object.values(JSON.parse(JSON.stringify(rows)));
         const userFound = usersFromDB.find(item => searchForUser_1.searchForUser(item, user));
         return userFound;
