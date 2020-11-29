@@ -8,7 +8,7 @@ import { errorHandle } from "../errors/errorHandle";
 
 
 export const registration = (req: Request, res: Response, next: NextFunction) => {
-  const user: UserInterface = req.body.user;
+  const user: UserInterface = req.body.user; 
   (async () => {
       const matchedUser = await User.findUser(user).catch(err => next(errorHandle(err, 500)));    
       if(matchedUser){   

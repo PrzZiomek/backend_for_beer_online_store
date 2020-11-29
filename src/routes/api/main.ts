@@ -2,18 +2,18 @@ import { Router } from "express";
 
 import { login } from "../../controllers/api/login";
 import { registration } from "../../controllers/api/registration";
-import { logout } from "../../controllers/api/logout";
+import { sendJwt } from "../../controllers/api/sendJwt";
+import { isAuth } from "../../middleware/isAuth";
 
 
 const router = Router();
 
 
-router.post("/api/registration", registration);
+router.get("/api/jwt", sendJwt);
 
-router.post("/api/login", login);
+router.post("/api/registration", isAuth, registration);
 
-
-router.post("/api/logout", logout);
+router.post("/api/login", isAuth, login);
 
 
  export const apiRoutes = router;

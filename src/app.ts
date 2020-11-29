@@ -5,7 +5,6 @@ import bodyParser from 'body-parser';
 import session from 'express-session';
 
 import { adminRoutes } from './routes/admin';
-import { options } from './util/sessionStoreOptions';
 import { apiRoutes } from './routes/api/main';
 import { ExtendedError } from './controllers/errors/extendedErrorClass';
 
@@ -22,14 +21,8 @@ app.use(bodyParser.json());
 
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use(session({
-  secret: "some secret string",
-  resave: false,
-  saveUninitialized: false,
-  store: new MySQLStore(options)
-}));
 
-app.use((req: Request, res: Response, next: NextFunction) => {
+app.use((_: Request, res: Response, next: NextFunction) => {
   res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, PATCH, DELETE");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   next();
@@ -38,11 +31,12 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 app.use(adminRoutes);
 app.use(apiRoutes);
 
+/*
 app.use((error: ExtendedError, req: Request, res: Response, next: NextFunction) => {
  // res.status(error.httpStatusCode)
 
 })
-
+*/
 
 app.listen(PORT, () => {
   console.log('Server start!');
