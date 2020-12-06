@@ -27,6 +27,7 @@
     "express-session": "^1.17.1",
     "express-sse": "^0.5.3",
     "express-sse-ts": "^1.0.2",
+    "express-validator": "^6.7.0",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.2.5",
     "socket.io": "^3.0.3"

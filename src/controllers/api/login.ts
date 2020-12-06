@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { validationResult } from 'express-validator';
 
 import { UserInterface } from "../../models/users/interfaces/user";
 import { bcryptCompare } from "./helpers/bcryptCompare";
@@ -8,9 +9,14 @@ import { token } from '../../models/token/token';
 
 
 
-export const login = (req: Request, res: Response, next: NextFunction) => {
-  const user: UserInterface = req.body.user;  
-  (async () => {
+export const login = async (req: Request, res: Response, next: NextFunction) => {
+    const user: UserInterface = req.body.user;  
+    const validationErrors = validationResult(req);
+    if(!validationErrors.isEmpty()){
+      return res.status(422).json({
+        message: validationErrors.array(),
+      });
+    }
     const matchedUser = await User.findUser(user).catch(err => next(errorHandle(err, 500)));    
     if(matchedUser){ 
       const doMatch = await bcryptCompare(user.password, matchedUser.password).catch(err => next(errorHandle(err, 500)));
@@ -22,10 +28,9 @@ export const login = (req: Request, res: Response, next: NextFunction) => {
       })   
     }else{ 
       res.status(200).json({
-        message: "Nieprawidłowe hasło lub login!"
+        message: "Nieprawidłowe hasło lub login!",
       })  
      }                               
-  })();   
 }
 
 

@@ -8,8 +8,6 @@ const path_1 = __importDefault(require("path"));
 const cors_1 = __importDefault(require("cors"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const express_session_1 = __importDefault(require("express-session"));
-//import csrf from 'csurf';
-//import { options } from './util/sessionStoreOptions';
 const admin_1 = require("./routes/admin");
 const main_1 = require("./routes/api/main");
 const PORT = 8080;
@@ -20,16 +18,6 @@ app.use(cors_1.default());
 app.use(body_parser_1.default.urlencoded({ extended: false }));
 app.use(body_parser_1.default.json());
 app.use(express_1.default.static(path_1.default.join(__dirname, "public")));
-/*
-app.use(session({
-  secret: "some secret string",
-  resave: false,
-  saveUninitialized: false,
-  store: new MySQLStore(options)
-}));
-*/
-//const csrfProtection = csrf();
-//app.use(csrfProtection);
 app.use((_, res, next) => {
     res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST, PATCH, DELETE");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
