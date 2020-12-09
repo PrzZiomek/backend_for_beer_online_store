@@ -9,17 +9,11 @@ const check_1 = require("express-validator/check");
 const User_1 = require("../../models/users/User");
 const errorHandle_1 = require("../errors/errorHandle");
 exports.registration = async (req, res, next) => {
-    const user = req.body.user;
+    const user = req.body;
     const validationErrors = check_1.validationResult(req);
     if (!validationErrors.isEmpty()) {
         return res.status(422).json({
             message: validationErrors.array(),
-        });
-    }
-    const matchedUser = await User_1.User.findUser(user).catch(err => next(errorHandle_1.errorHandle(err, 500)));
-    if (matchedUser) {
-        res.status(200).json({
-            message: "Istnieje juz konto z takimi danymi"
         });
     }
     else {

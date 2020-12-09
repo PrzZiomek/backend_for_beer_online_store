@@ -5,6 +5,9 @@ import { login } from "../../controllers/api/login";
 import { registration } from "../../controllers/api/registration";
 import { sendJwt } from "../../controllers/api/sendJwt";
 import { isAuth } from "../../middleware/isAuth";
+import { UserInterface } from "../../models/users/interfaces/user";
+import { User } from "../../models/users/User";
+import { bcryptCompare } from "../../controllers/api/helpers/bcryptCompare";
 
 
 const router = Router();
@@ -28,7 +31,7 @@ router.post(
             "please enter the name with at least 2 and max 12 characters, without numbers"
           )
           .isLength({ min: 2, max: 12 })
-          .isAlpha(),
+          .isAlpha(),       
           body(
             "surname",
             "please enter the surname with at least 2 and max 12 characters, without numbers"
@@ -36,7 +39,7 @@ router.post(
           .isLength({ min: 2, max: 12 })
           .isAlpha(),
           body("acceptRegulations")
-            .custom((checked) => {
+            .custom((checked) => { 
                 if(!checked){
                     throw new Error("to processing data further you must accept regulations");
                 }
@@ -49,7 +52,13 @@ router.post(
                 }
                 return true;
             })
-
+            .custom(async (_, { req }) => {
+              const user: UserInterface = req.body; 
+              const matchedUser = await User.findUser(user).catch(err => console.log(err) /* next(errorHandle(err, 500))*/);    
+              if(matchedUser){
+                return Promise.reject("Istnieje juz konto z takimi danymi")
+              } 
+          })
      ],
      isAuth, registration
     );
@@ -64,8 +73,18 @@ router.post(
       body(
           "password",
           "please enter the password with at least 8 and max 12 characters"
-          )
-        .isLength({ min: 8, max: 12 })
+        )
+        .custom(async (_, { req }) => {
+          const user: UserInterface = req.body;  console.log(user);   
+          const matchedUser = await User.findUser(user).catch(err => console.log(err) /* next(errorHandle(err, 500))*/);    
+          if(matchedUser){ 
+            const doMatch = await bcryptCompare(user.password, matchedUser.password).catch(err => console.log(err) /* next(errorHandle(err, 500))*/);
+            if(doMatch === undefined) return;           
+            if(!doMatch){
+              return Promise.reject("Nieprawidłowe hasło lub login!");
+            }
+          } 
+        })       
     ],
      isAuth, login
    );

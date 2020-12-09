@@ -7,6 +7,8 @@ const login_1 = require("../../controllers/api/login");
 const registration_1 = require("../../controllers/api/registration");
 const sendJwt_1 = require("../../controllers/api/sendJwt");
 const isAuth_1 = require("../../middleware/isAuth");
+const User_1 = require("../../models/users/User");
+const bcryptCompare_1 = require("../../controllers/api/helpers/bcryptCompare");
 const router = express_1.Router();
 router.get("/api/jwt", sendJwt_1.sendJwt);
 router.post("/api/registration", [
@@ -27,6 +29,20 @@ router.post("/api/registration", [
             throw new Error("to processing data further you must accept regulations");
         }
         return true;
+    }),
+    express_validator_1.body("confirmPassword")
+        .custom((value, { req }) => {
+        if (value !== req.body.password) {
+            throw new Error("please repeat password");
+        }
+        return true;
+    })
+        .custom(async (_, { req }) => {
+        const user = req.body;
+        const matchedUser = await User_1.User.findUser(user).catch(err => console.log(err) /* next(errorHandle(err, 500))*/);
+        if (matchedUser) {
+            return Promise.reject("Istnieje juz konto z takimi danymi");
+        }
     })
 ], isAuth_1.isAuth, registration_1.registration);
 router.post("/api/login", [
@@ -34,6 +50,18 @@ router.post("/api/login", [
         .isEmail()
         .withMessage("please enter the valid email"),
     express_validator_1.body("password", "please enter the password with at least 8 and max 12 characters")
-        .isLength({ min: 8, max: 12 })
+        .custom(async (_, { req }) => {
+        const user = req.body;
+        console.log(user);
+        const matchedUser = await User_1.User.findUser(user).catch(err => console.log(err) /* next(errorHandle(err, 500))*/);
+        if (matchedUser) {
+            const doMatch = await bcryptCompare_1.bcryptCompare(user.password, matchedUser.password).catch(err => console.log(err) /* next(errorHandle(err, 500))*/);
+            if (doMatch === undefined)
+                return;
+            if (!doMatch) {
+                return Promise.reject("Nieprawidłowe hasło lub login!");
+            }
+        }
+    })
 ], isAuth_1.isAuth, login_1.login);
 exports.apiRoutes = router;
