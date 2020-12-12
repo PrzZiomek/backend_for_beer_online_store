@@ -1,8 +1,8 @@
-import { UserInterface as User } from "./user";
+import { UserInterface as User, UserOrEmail } from "./user";
 
 
 export interface UserClass {
     fetchAllUsers(): Promise<User[]> ;
-    findUser(user: User): Promise<User | undefined>;
+    findUser(user: UserOrEmail): Promise<UserOrEmail | undefined>;
     saveUser(user: User): void;
 }

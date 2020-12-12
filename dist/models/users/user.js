@@ -13,8 +13,15 @@ exports.User = class {
         if (!rows)
             return;
         const usersFromDB = Object.values(JSON.parse(JSON.stringify(rows)));
-        const userFound = usersFromDB.find(item => searchForUser_1.searchForUser(item, user));
-        return userFound;
+        if (user.type === "userEmail") {
+            const userFound = usersFromDB.find(item => searchForUser_1.compareUserEmail(item, user));
+            console.log(userFound);
+            return userFound;
+        }
+        if (user.type === "userInterface") {
+            const userFound = usersFromDB.find(item => searchForUser_1.searchForUser(item, user));
+            return userFound;
+        }
     }
     static saveUser({ name, surname, email, password }) {
         database_1.pool.execute('INSERT INTO users (name, surname, email, password) VALUES (?, ?, ?, ?)', [name, surname, email, password]);

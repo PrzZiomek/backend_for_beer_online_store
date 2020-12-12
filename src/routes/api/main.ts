@@ -1,13 +1,13 @@
 import { Router } from "express";
 import { check, body } from "express-validator"
+import bcrypt from 'bcryptjs';
 
 import { login } from "../../controllers/api/login";
 import { registration } from "../../controllers/api/registration";
 import { sendJwt } from "../../controllers/api/sendJwt";
 import { isAuth } from "../../middleware/isAuth";
-import { UserInterface } from "../../models/users/interfaces/user";
+import { UserInterface, UserOrEmail } from "../../models/users/interfaces/user";
 import { User } from "../../models/users/User";
-import { bcryptCompare } from "../../controllers/api/helpers/bcryptCompare";
 
 
 const router = Router();
@@ -52,7 +52,7 @@ router.post(
                 }
                 return true;
             })
-            .custom(async (_, { req }) => {
+            .custom( async (_, { req }) => {
               const user: UserInterface = req.body; 
               const matchedUser = await User.findUser(user).catch(err => console.log(err) /* next(errorHandle(err, 500))*/);    
               if(matchedUser){
@@ -74,15 +74,18 @@ router.post(
           "password",
           "please enter the password with at least 8 and max 12 characters"
         )
-        .custom(async (_, { req }) => {
-          const user: UserInterface = req.body;  console.log(user);   
-          const matchedUser = await User.findUser(user).catch(err => console.log(err) /* next(errorHandle(err, 500))*/);    
-          if(matchedUser){ 
-            const doMatch = await bcryptCompare(user.password, matchedUser.password).catch(err => console.log(err) /* next(errorHandle(err, 500))*/);
-            if(doMatch === undefined) return;           
+        .custom( async (_, { req }) => {
+          const user: UserInterface = req.body; 
+          const userEmail: UserOrEmail = { type: "userEmail", email: user.email };
+          const matchedUser = await User.findUser(userEmail).catch(err => console.log(err) /* next(errorHandle(err, 500))*/)  as UserInterface; 
+          if(matchedUser){  
+            const doMatch = await bcrypt.compare(user.password, matchedUser.password).catch(err => console.log(err) /* next(errorHandle(err, 500))*/);
+            if(doMatch === undefined) return;         
             if(!doMatch){
               return Promise.reject("Nieprawidłowe hasło lub login!");
             }
+          }else{
+            return Promise.reject("Nieprawidłowe hasło lub login!");
           } 
         })       
     ],

@@ -1,4 +1,4 @@
-import { UserInterface } from "./interfaces/user";
+import { UserInterface, UserOrEmail } from "./interfaces/user";
 
 
 export const searchForUser = (item: any, user: UserInterface) =>{ 
@@ -9,4 +9,11 @@ export const searchForUser = (item: any, user: UserInterface) =>{
          surname === userInDB.surname ||
          email === userInDB.email
      ) 
+  }
+
+
+  export const compareUserEmail = (item: any, user: UserOrEmail) =>{ 
+    const { email } = user; 
+    let userInDB = item as UserInterface; 
+      return email === userInDB.email;
   }
