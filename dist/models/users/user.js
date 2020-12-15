@@ -15,7 +15,6 @@ exports.User = class {
         const usersFromDB = Object.values(JSON.parse(JSON.stringify(rows)));
         if (user.type === "userEmail") {
             const userFound = usersFromDB.find(item => searchForUser_1.compareUserEmail(item, user));
-            console.log(userFound);
             return userFound;
         }
         if (user.type === "userInterface") {

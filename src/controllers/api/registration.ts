@@ -9,7 +9,7 @@ import { errorHandle } from "../errors/errorHandle";
 
 
 
-export const registration = async (req: Request, res: Response, next: NextFunction) => {
+export const validationStatement = async (req: Request, res: Response, next: NextFunction) => {
     const user: UserInterface = req.body; 
     const validationErrors = validationResult(req);
     if(!validationErrors.isEmpty()){
@@ -17,18 +17,23 @@ export const registration = async (req: Request, res: Response, next: NextFuncti
         message: validationErrors.array(),
       });
     }else{
-      const hashedPswd = await bcrypt.hash(user.password, 12).catch(err => next(errorHandle(err, 500)));
-      if(!hashedPswd) return;
-      let password = hashedPswd;
-      User.saveUser({ ...user, password });
-      res.status(200).json({
-        message: "Rejestracja się udała"
-      });    
+      req.app.locals.user = user;
+      next();
     }      
 }
 
 
-
-
+export const registration = async (req: Request, res: Response, next: NextFunction) => {
+  const user: UserInterface = req.app.locals.user;
+  const hashedPswd = await bcrypt.hash(user.password, 12).catch(err => next(errorHandle(err, 500)));
+  if(!hashedPswd) return;
+  User.saveUser({
+     ...user,
+     password: hashedPswd
+  });
+  res.status(200).json({
+    message: "Rejestracja się udała"
+  });    
+}
 
 

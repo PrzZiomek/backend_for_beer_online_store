@@ -1,24 +1,68 @@
 import { Router } from "express";
-import { check, body } from "express-validator"
-import bcrypt from 'bcryptjs';
 
 import { login } from "../../controllers/api/login";
-import { registration } from "../../controllers/api/registration";
+import { registration, validationStatement } from "../../controllers/api/registration";
 import { sendJwt } from "../../controllers/api/sendJwt";
 import { isAuth } from "../../middleware/isAuth";
-import { UserInterface, UserOrEmail } from "../../models/users/interfaces/user";
+import { UserInterface } from "../../models/users/interfaces/user";
 import { User } from "../../models/users/User";
+import { Validator } from "../../models/validator/validator";
+import { Facade } from "../../models/validatorFacade";
 
 
 const router = Router();
+const facade = new Facade(Validator);
 
 
 router.get("/api/jwt", sendJwt);
 
 router.post(
     "/api/registration",
-    [
-        check('email')
+     facade.validate("registration"),
+     isAuth,
+     validationStatement, 
+     registration
+    );
+
+
+router.post(
+    "/api/login",
+    facade.validate("login"),
+    isAuth, 
+    login
+   );
+
+
+ export const apiRoutes = router;
+
+
+
+
+ /*
+
+ check('email')
+        .isEmail()
+        .withMessage("please enter the valid email"),
+      body(
+          "password",
+          "please enter the password with at least 8 and max 12 characters"
+        )
+        .custom( async (_, { req }) => {
+          const user = req.body;
+          const matchedUser = await User.findUser(user.email).catch(err => console.log(err) )  as UserInterface; 
+          if(matchedUser){  
+            const doMatch = await bcrypt.compare(user.password, matchedUser.password).catch(err => console.log(err) );
+            if(doMatch === undefined) return;         
+            if(!doMatch){
+              return Promise.reject("Nieprawidłowe hasło lub login!");
+            }
+          }else{
+            return Promise.reject("Nieprawidłowe hasło lub login!");
+          } 
+        })              
+
+
+  check('email')
           .isEmail()
           .withMessage("please enter the valid email"),
         body(
@@ -54,43 +98,10 @@ router.post(
             })
             .custom( async (_, { req }) => {
               const user: UserInterface = req.body; 
-              const matchedUser = await User.findUser(user).catch(err => console.log(err) /* next(errorHandle(err, 500))*/);    
+              const matchedUser = await User.findUser(user).catch(err => console.log(err) );    
               if(matchedUser){
                 return Promise.reject("Istnieje juz konto z takimi danymi")
               } 
           })
-     ],
-     isAuth, registration
-    );
 
-
-router.post(
-    "/api/login",
-    [
-      check('email')
-        .isEmail()
-        .withMessage("please enter the valid email"),
-      body(
-          "password",
-          "please enter the password with at least 8 and max 12 characters"
-        )
-        .custom( async (_, { req }) => {
-          const user: UserInterface = req.body; 
-          const userEmail: UserOrEmail = { type: "userEmail", email: user.email };
-          const matchedUser = await User.findUser(userEmail).catch(err => console.log(err) /* next(errorHandle(err, 500))*/)  as UserInterface; 
-          if(matchedUser){  
-            const doMatch = await bcrypt.compare(user.password, matchedUser.password).catch(err => console.log(err) /* next(errorHandle(err, 500))*/);
-            if(doMatch === undefined) return;         
-            if(!doMatch){
-              return Promise.reject("Nieprawidłowe hasło lub login!");
-            }
-          }else{
-            return Promise.reject("Nieprawidłowe hasło lub login!");
-          } 
-        })       
-    ],
-     isAuth, login
-   );
-
-
- export const apiRoutes = router;
+  */

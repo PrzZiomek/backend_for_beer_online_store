@@ -1,10 +1,10 @@
 import { pool as db } from '../../util/database';
 import { searchForUser, compareUserEmail } from './searchForUser';
 import { UserInterface, UserOrEmail } from './interfaces/user';
-import { UserClass } from './interfaces/userClass';
+import { UserClassInterface } from './interfaces/userClass';
 
 
-export const User: UserClass = class {
+export const User: UserClassInterface = class {
 
     static async fetchAllUsers(): Promise<UserInterface[]>{
         const resDB = await db.execute('SELECT * FROM users');        
@@ -17,18 +17,18 @@ export const User: UserClass = class {
         const usersFromDB = Object.values(JSON.parse(JSON.stringify(rows))); 
         if(user.type === "userEmail"){
            const userFound = usersFromDB.find(item => compareUserEmail(item, user)) as UserOrEmail; 
-          return userFound;
+         return userFound;
         }
         if(user.type === "userInterface"){
            const userFound = usersFromDB.find(item => searchForUser(item, user)) as UserOrEmail;
-          return userFound;
+         return userFound;
         }      
     }
 
     static saveUser({ name, surname, email, password }: UserInterface): void{
         db.execute(
-        'INSERT INTO users (name, surname, email, password) VALUES (?, ?, ?, ?)',
-        [ name, surname, email, password ]
+          'INSERT INTO users (name, surname, email, password) VALUES (?, ?, ?, ?)',
+          [ name, surname, email, password ]
         )
     }
 }
