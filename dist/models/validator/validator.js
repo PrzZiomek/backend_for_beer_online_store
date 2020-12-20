@@ -11,10 +11,12 @@ exports.Validator = class {
     static checkEmail() {
         return express_validator_1.check('email')
             .isEmail()
-            .withMessage("please enter the valid email");
+            .withMessage("please enter the valid email")
+            .normalizeEmail();
     }
     static checkPasswordLength() {
         return express_validator_1.body("password", "please enter the password with at least 8 and max 12 characters")
+            .trim()
             .isLength({ min: 8, max: 12 });
     }
     static checkName() {
@@ -38,6 +40,7 @@ exports.Validator = class {
     }
     static checkPasswordrepeating() {
         return express_validator_1.body("confirmPassword")
+            .trim()
             .custom((value, { req }) => {
             if (value !== req.body.password) {
                 throw new Error("please repeat password");
@@ -47,6 +50,7 @@ exports.Validator = class {
     }
     static checkIfUserAccountExist() {
         return express_validator_1.body("confirmPassword")
+            .trim()
             .custom(async (_, { req }) => {
             const user = req.body;
             const matchedUser = await User_1.User.findUser(user).catch(err => console.log(err) /* next(errorHandle(err, 500))*/);
@@ -57,6 +61,7 @@ exports.Validator = class {
     }
     static loginVerificaton() {
         return express_validator_1.body("password")
+            .trim()
             .custom(async (_, { req }) => {
             const user = req.body;
             const matchedUser = await User_1.User.findUser(user.email).catch(err => console.log(err));

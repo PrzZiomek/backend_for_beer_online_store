@@ -4,7 +4,6 @@ exports.Facade = void 0;
 class Facade {
     constructor(validator) {
         this.options = {};
-        // this.validateMethods(validator);
         this.options = this.validateMethods(validator);
     }
     validateMethods(validator) {

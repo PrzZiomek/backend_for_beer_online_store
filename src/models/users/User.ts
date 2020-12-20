@@ -7,12 +7,12 @@ import { UserClassInterface } from './interfaces/userClass';
 export const User: UserClassInterface = class {
 
     static async fetchAllUsers(): Promise<UserInterface[]>{
-        const resDB = await db.execute('SELECT * FROM users');        
+        const resDB = await db.execute('SELECT * FROM users');         
       return resDB[0] as UserInterface[];
     }
 
     static async findUser(user: UserOrEmail ): Promise<UserOrEmail | undefined>{
-        const rows = await this.fetchAllUsers().catch(err => console.log(`req to database: ${err}`));
+        const rows = await this.fetchAllUsers().catch(err => console.log(err));
         if(!rows) return;
         const usersFromDB = Object.values(JSON.parse(JSON.stringify(rows))); 
         if(user.type === "userEmail"){

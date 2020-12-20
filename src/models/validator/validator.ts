@@ -13,6 +13,7 @@ export const Validator: ValidatorClassInterface = class {
       return check('email')
               .isEmail()
               .withMessage("please enter the valid email")
+              .normalizeEmail()
     }
 
     static checkPasswordLength(): ValidationChain {
@@ -20,7 +21,8 @@ export const Validator: ValidatorClassInterface = class {
               "password",
               "please enter the password with at least 8 and max 12 characters"
               )
-              .isLength({ min: 8, max: 12 })
+              .trim()
+              .isLength({ min: 8, max: 12 })             
     }
 
     static checkName(): ValidationChain {
@@ -53,16 +55,18 @@ export const Validator: ValidatorClassInterface = class {
 
     static checkPasswordrepeating(): ValidationChain {
       return body("confirmPassword")
+              .trim() 
               .custom((value, { req }) => {
                 if(value !== req.body.password){
                 throw new Error("please repeat password");
                 }
                 return true;
-                })       
+                })                     
     }
 
     static checkIfUserAccountExist(): ValidationChain {
       return body("confirmPassword")
+              .trim() 
               .custom( async (_, { req }) => {
                 const user: UserInterface = req.body; 
                 const matchedUser = await User.findUser(user).catch(err => console.log(err) /* next(errorHandle(err, 500))*/);    
@@ -74,6 +78,7 @@ export const Validator: ValidatorClassInterface = class {
 
     static loginVerificaton(): ValidationChain {
       return body("password")
+              .trim()
               .custom( async (_, { req }) => {
                 const user = req.body;
                 const matchedUser = await User.findUser(user.email).catch(err => console.log(err) )  as UserInterface; 
@@ -86,6 +91,6 @@ export const Validator: ValidatorClassInterface = class {
                 }else{
                     return Promise.reject("Nieprawidłowe hasło lub login!");
                 } 
-            })
-    
+            }) 
+          }
 }

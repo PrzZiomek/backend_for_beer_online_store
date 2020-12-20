@@ -2,14 +2,13 @@ import { Request, Response, NextFunction } from "express";
 import bcrypt from 'bcryptjs';
 import { validationResult } from 'express-validator/check';
 
-
 import { UserInterface } from "../../models/users/interfaces/user";
 import { User } from "../../models/users/User";
 import { errorHandle } from "../errors/errorHandle";
 
 
 
-export const validationStatement = async (req: Request, res: Response, next: NextFunction) => {
+export const validationMessage = async (req: Request, res: Response, next: NextFunction) => {
     const user: UserInterface = req.body; 
     const validationErrors = validationResult(req);
     if(!validationErrors.isEmpty()){
@@ -17,9 +16,9 @@ export const validationStatement = async (req: Request, res: Response, next: Nex
         message: validationErrors.array(),
       });
     }else{
-      req.app.locals.user = user;
+      req.app.locals.user = user; 
       next();
-    }      
+    }    
 }
 
 

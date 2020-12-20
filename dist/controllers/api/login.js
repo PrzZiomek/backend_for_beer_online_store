@@ -7,6 +7,7 @@ exports.login = async (req, res, next) => {
     const user = req.body;
     const validationErrors = express_validator_1.validationResult(req);
     if (!validationErrors.isEmpty()) {
+        next(new Error("heja!"));
         return res.status(422).json({
             message: validationErrors.array(),
         });

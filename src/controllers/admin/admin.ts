@@ -19,8 +19,11 @@ export const user = (req: Request, res: Response) => {
         // console.log(rows);        
       })
       .catch(err => console.log(err))
+  }
 
 
+  export const errorPage = (_ : Request, res: Response) => {
+    res.send("<h1>An error occurs!!!</h1>");
   }
 
 

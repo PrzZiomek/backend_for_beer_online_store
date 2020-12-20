@@ -25,12 +25,9 @@ app.use((_, res, next) => {
 });
 app.use(admin_1.adminRoutes);
 app.use(main_1.apiRoutes);
-/*
-app.use((error: ExtendedError, req: Request, res: Response, next: NextFunction) => {
- // res.status(error.httpStatusCode)
-
-})
-*/
+app.use((error, req, res, next) => {
+    res.redirect("/errors");
+});
 app.listen(PORT, () => {
     console.log('Server start!');
 });

@@ -9,7 +9,7 @@ exports.User = class {
         return resDB[0];
     }
     static async findUser(user) {
-        const rows = await this.fetchAllUsers().catch(err => console.log(`req to database: ${err}`));
+        const rows = await this.fetchAllUsers().catch(err => console.log(err));
         if (!rows)
             return;
         const usersFromDB = Object.values(JSON.parse(JSON.stringify(rows)));

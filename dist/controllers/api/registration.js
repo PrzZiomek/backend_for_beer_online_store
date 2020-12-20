@@ -3,12 +3,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.registration = exports.validationStatement = void 0;
+exports.registration = exports.validationMessage = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const check_1 = require("express-validator/check");
 const User_1 = require("../../models/users/User");
 const errorHandle_1 = require("../errors/errorHandle");
-exports.validationStatement = async (req, res, next) => {
+exports.validationMessage = async (req, res, next) => {
     const user = req.body;
     const validationErrors = check_1.validationResult(req);
     if (!validationErrors.isEmpty()) {
