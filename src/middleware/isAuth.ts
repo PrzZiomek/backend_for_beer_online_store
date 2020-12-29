@@ -5,14 +5,16 @@ import { errorHandle } from '../controllers/errors/errorHandle';
 
 export const isAuth = (req: Request, res: Response, next: NextFunction) => { 
     const isHeader = req.get("Authorization");    
-    if(!isHeader) throw errorHandle("Not authentcated", 401);
+    if(!isHeader) throw errorHandle("Not authenticated", 401);
     let token = isHeader.split(" ")[1];
     let decodedToken;
     try{
-         decodedToken = jwt.verify(token, "averycryptictoken");
+         decodedToken = jwt.verify(token, "averycryptictoken");  
     } catch(err){      
         throw errorHandle(err, 500);
     }
     if(!decodedToken) throw errorHandle("Not authenticated", 401);
+    // req object to modify!
+    req.tokenIat = token.iat; // !!!
     next();
 }

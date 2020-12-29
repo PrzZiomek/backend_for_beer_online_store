@@ -6,6 +6,7 @@ import { sendJwt } from "../../controllers/api/sendJwt";
 import { isAuth } from "../../middleware/isAuth";
 import { Validator } from "../../models/validator/validator";
 import { Facade } from "../../models/validatorFacade";
+import { cartContent } from "../../controllers/api/cartContent";
 
 
 const router = Router();
@@ -30,6 +31,13 @@ router.post(
     login
    );
 
+   router.post(
+    "/api/cart-content",
+    isAuth, 
+    cartContent
+   );
+
+   
 
  export const apiRoutes = router;
 

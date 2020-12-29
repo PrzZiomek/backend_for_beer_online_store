@@ -5,7 +5,7 @@ class ExtendedError extends Error {
     constructor(message) {
         super(message);
         this.name = "extendedError";
-        Object.setPrototypeOf(this, ExtendedError.prototype);
+        Object.setPrototypeOf(this, new.target.prototype);
     }
 }
 exports.ExtendedError = ExtendedError;

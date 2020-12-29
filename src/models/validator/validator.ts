@@ -1,7 +1,7 @@
 import { check, body, ValidationChain } from "express-validator";
 import bcrypt from 'bcryptjs';
 
-import { UserInterface } from "../users/interfaces/user";
+import { UserInterface, UserEmail } from "../users/interfaces/user";
 import { User } from "../users/User";
 import { ValidatorClassInterface } from "./interfaces";
 
@@ -80,12 +80,13 @@ export const Validator: ValidatorClassInterface = class {
       return body("password")
               .trim()
               .custom( async (_, { req }) => {
-                const user = req.body;
-                const matchedUser = await User.findUser(user.email).catch(err => console.log(err) )  as UserInterface; 
-                if(matchedUser){  
+                const user: UserInterface = req.body; 
+                const userEmail: UserEmail = { type: "userEmail", email: user.email };
+                const matchedUser = await User.findUser(userEmail).catch(err => console.log(err) )  as UserInterface; 
+                if(matchedUser){ 
                   const doMatch = await bcrypt.compare(user.password, matchedUser.password).catch(err => console.log(err) );
-                  if(doMatch === undefined) return;         
-                  if(!doMatch){
+                  if(doMatch === undefined) return;       
+                  if(!doMatch){  
                     return Promise.reject("Nieprawidłowe hasło lub login!");
                   }
                 }else{

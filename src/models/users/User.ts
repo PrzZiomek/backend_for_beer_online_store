@@ -15,7 +15,7 @@ export const User: UserClassInterface = class {
         const rows = await this.fetchAllUsers().catch(err => console.log(err));
         if(!rows) return;
         const usersFromDB = Object.values(JSON.parse(JSON.stringify(rows))); 
-        if(user.type === "userEmail"){
+        if(user.type === "userEmail"){ 
            const userFound = usersFromDB.find(item => compareUserEmail(item, user)) as UserOrEmail; 
          return userFound;
         }

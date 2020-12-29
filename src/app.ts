@@ -33,14 +33,16 @@ app.use(apiRoutes);
 
 
 app.use((error: ExtendedError, req: Request, res: Response, next: NextFunction) => {
-   res.redirect("/errors");
+  const status = error.httpStatusCode;
+  const message = error.message;
+  res.status(status).json({ message });
+  res.redirect("/errors");
 })
 
 
 app.listen(PORT, () => {
   console.log('Server start!');
 });
-
 
 
 
