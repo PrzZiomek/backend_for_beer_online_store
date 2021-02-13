@@ -1,10 +1,9 @@
 import { pool as db } from '../../util/database';
 import { searchForUser, compareUserEmail } from './searchForUser';
 import { UserInterface, UserOrEmail } from './interfaces/user';
-import { UserClassInterface } from './interfaces/userClass';
 
 
-export const User: UserClassInterface = class {
+export class User {
 
     static async fetchAllUsers(): Promise<UserInterface[]>{
         const resDB = await db.execute('SELECT * FROM users');         

@@ -4,8 +4,7 @@ import bcrypt from 'bcryptjs';
 import { UserInterface, UserEmail } from "../users/interfaces/user";
 import { User } from "../users/User";
 import { ValidatorClassInterface } from "./interfaces";
-
-
+import { errorHandle } from "../../controllers/errors/errorHandle";
 
 export const Validator: ValidatorClassInterface = class {
 
@@ -79,19 +78,20 @@ export const Validator: ValidatorClassInterface = class {
     static loginVerificaton(): ValidationChain {
       return body("password")
               .trim()
-              .custom( async (_, { req }) => {
+              .custom(async (_, { req }) => {
                 const user: UserInterface = req.body; 
                 const userEmail: UserEmail = { type: "userEmail", email: user.email };
-                const matchedUser = await User.findUser(userEmail).catch(err => console.log(err) )  as UserInterface; 
+                const matchedUser = await User.findUser(userEmail).catch(err =>{ throw errorHandle(err, 401)} )  as UserInterface; 
                 if(matchedUser){ 
-                  const doMatch = await bcrypt.compare(user.password, matchedUser.password).catch(err => console.log(err) );
+                  const doMatch = await bcrypt.compare(user.password, matchedUser.password).catch(err => { throw errorHandle(err, 500)} );
                   if(doMatch === undefined) return;       
                   if(!doMatch){  
                     return Promise.reject("Nieprawidłowe hasło lub login!");
                   }
                 }else{
                     return Promise.reject("Nieprawidłowe hasło lub login!");
-                } 
-            }) 
+                };
+                return;
+              }); 
           }
 }

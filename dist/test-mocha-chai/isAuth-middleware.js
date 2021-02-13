@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const sinon_1 = __importDefault(require("sinon"));
 const chai_1 = require("chai");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const isAuth_1 = require("../middleware/isAuth");
+const isAuth_1 = require("../src/middleware/isAuth");
 describe("isAuth middleware", function () {
     it("should throw an error if no authorization with header occurs", function () {
         const req = {

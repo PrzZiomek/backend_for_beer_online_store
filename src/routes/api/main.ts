@@ -31,7 +31,7 @@ router.post(
     login
    );
 
-   router.post(
+router.post(
     "/api/cart-content",
     isAuth, 
     cartContent

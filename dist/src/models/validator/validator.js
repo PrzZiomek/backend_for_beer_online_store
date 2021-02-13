@@ -7,6 +7,7 @@ exports.Validator = void 0;
 const express_validator_1 = require("express-validator");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const User_1 = require("../users/User");
+const errorHandle_1 = require("../../controllers/errors/errorHandle");
 const Validator = class {
     static checkEmail() {
         return express_validator_1.check('email')
@@ -65,9 +66,9 @@ const Validator = class {
             .custom(async (_, { req }) => {
             const user = req.body;
             const userEmail = { type: "userEmail", email: user.email };
-            const matchedUser = await User_1.User.findUser(userEmail).catch(err => console.log(err));
+            const matchedUser = await User_1.User.findUser(userEmail).catch(err => { throw errorHandle_1.errorHandle(err, 401); });
             if (matchedUser) {
-                const doMatch = await bcryptjs_1.default.compare(user.password, matchedUser.password).catch(err => console.log(err));
+                const doMatch = await bcryptjs_1.default.compare(user.password, matchedUser.password).catch(err => { throw errorHandle_1.errorHandle(err, 500); });
                 if (doMatch === undefined)
                     return;
                 if (!doMatch) {
@@ -77,6 +78,8 @@ const Validator = class {
             else {
                 return Promise.reject("Nieprawidłowe hasło lub login!");
             }
+            ;
+            return;
         });
     }
 };

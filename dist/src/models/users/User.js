@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const database_1 = require("../../util/database");
 const searchForUser_1 = require("./searchForUser");
-const User = class {
+class User {
     static async fetchAllUsers() {
         const resDB = await database_1.pool.execute('SELECT * FROM users');
         return resDB[0];
@@ -25,5 +25,5 @@ const User = class {
     static saveUser({ name, surname, email, password }) {
         database_1.pool.execute('INSERT INTO users (name, surname, email, password) VALUES (?, ?, ?, ?)', [name, surname, email, password]);
     }
-};
+}
 exports.User = User;

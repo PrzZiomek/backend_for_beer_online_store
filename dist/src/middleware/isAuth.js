@@ -20,6 +20,7 @@ const isAuth = (req, res, next) => {
     }
     if (!decodedToken)
         throw errorHandle_1.errorHandle("Not authenticated", 401);
+    req.tokenIat = decodedToken.iat;
     next();
 };
 exports.isAuth = isAuth;
